@@ -1,8 +1,10 @@
 package service;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,11 +12,14 @@ import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 //import com.google.gson.Gson;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 
+import demo.AddressBookDemo;
 import entity.AddressBook;
 import entity.Contact;
 
@@ -106,9 +111,41 @@ public class FileService {
 	}
 	
 	
-//	public void jsonFileWrite(Set<AddressBook> addressBooksSet) {
-//		Gson gson = new Gson();
-//		String jsonObj = gson.toJson(addressBooksSet);
-//		System.out.println(jsonObj);
-//	}
+	public void jsonFileWrite(Set<AddressBook> addressBooksSet) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		try {
+			Path path = Paths.get("D:/Bridgelabz/BridgeLabz/Assignments/AddressBookNew/src/main/resources/AddressBookJSON.json");
+			if(!Files.exists(path))
+				Files.createFile(path);
+			
+			for(AddressBook obj : addressBooksSet) {
+				for(Contact person : obj.contactsSet) 
+				{
+					String jsonObj = gson.toJson(person);
+					byte[] byteArray = jsonObj.getBytes();			
+					Files.write(path, byteArray, StandardOpenOption.APPEND);
+				}
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	
+	public void jsonFileRead() {
+		Gson gson = new Gson();
+		try {
+			Reader reader = new FileReader("D:/Bridgelabz/BridgeLabz/Assignments/AddressBookNew/src/main/resources/AddressBookJSON.json");
+			@SuppressWarnings("unchecked")
+			Set<AddressBook> newAddressBooksSet = gson.fromJson(reader, Set.class);
+			System.out.println(newAddressBooksSet);
+			//AddressBookDemo.addressBooksSet.add();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
