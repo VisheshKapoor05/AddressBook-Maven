@@ -25,7 +25,7 @@ public class AddressBookDemo {
 			@SuppressWarnings("resource")
 			Scanner sc = new Scanner(System.in);
 			
-			System.out.println("Press 1 to add an address book, 10 to read the addressBooks from the file, 11 to read from csvFile");
+			System.out.println("Press 1 to add an address book, 10 to read the addressBooks from the file, 11 to read from csvFile, 12 to read from JSON file");
 			int num = sc.nextInt();
 			
 			AddressBookService addressBookServiceObj = new AddressBookService();
@@ -43,7 +43,8 @@ public class AddressBookDemo {
 					addressBookServiceObj.addAddressBook(addressbookName);
 					addressBooksSet.add(addressBookServiceObj.newAddressBook);
 					//AddressBookDemo.fileWrite(addressBooksSet);
-					file.csvFileWrite(addressBooksSet);
+					//file.csvFileWrite(addressBooksSet);
+					file.jsonFileWrite(addressBooksSet);
 				}
 				else if(num==2) {
 					System.out.println("Enter the city or state you want to the person to be searched in");
@@ -94,6 +95,9 @@ public class AddressBookDemo {
 				}
 				else if(num==11) {
 					file.csvFileRead(addressBooksSet);
+				}
+				else if(num==12) {
+					//file.jsonFileRead();
 				}
 				else
 					System.out.println("Please enter a valid number");
